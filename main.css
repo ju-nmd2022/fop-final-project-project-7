@@ -3,7 +3,7 @@
 }
 
 body {
-    background-color: #555;
+    background-color: #000000;
     padding: 0;
     margin: 0;
     overflow: hidden;
@@ -12,9 +12,9 @@ body {
 /* to visualize the canvas size */
 #game-container {
     position: relative;
-    width: 256px;
-    height: 256px;
+    width: 512px;
+    height: 512px;
     margin: 0 auto;
-    margin-top: 2em;
-    outline: 1px solid white;
+    margin-top: 50px;
+    image-rendering: pixelated;
 }
