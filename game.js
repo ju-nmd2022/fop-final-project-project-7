@@ -17,17 +17,34 @@ window.addEventListener("load", function () {
   const spriteSheet = new Image(); //
   spriteSheet.onload = function () {
     // sprite position
-    let spriteX = 0;
-    let spriteY = 0;
+    let spriteX = 150; //sprite start position
+    let spriteY = 200;
+    let spriteSpeed = 2; //how quickly sprite moves
+
+    let direction = "down"; // default direction is down
+    let isMoving = false; //check if sprite is moving
 
     // animation loop
-    let frameIndex = 0;
-    let framesPerSecond = 2;
+    let frameIndex = 0; //which frame is displayed
+    let framesPerSecond = 2; //update rate
     setInterval(function () {
       // update sprite frames (stationary bouncing up and down)
-      frameIndex++;
-      if (frameIndex >= 2) {
-        frameIndex = 0;
+      if (isMoving) {
+        // sprite moving, show walking animation
+        framesPerSecond = 4;
+        frameIndex++;
+        if (frameIndex >= 4) {
+          //cycles through 4 frames
+          frameIndex = 0; //resets
+        }
+      } else {
+        // sprite not moving, show standing animation
+        framesPerSecond = 2;
+        frameIndex++;
+        if (frameIndex >= 2) {
+          //cycles through 2 frames
+          frameIndex = 0; //resets
+        }
       }
 
       // draw sprite and background
@@ -36,7 +53,7 @@ window.addEventListener("load", function () {
       ctx.drawImage(
         spriteSheet,
         frameIndex * 128,
-        128 * 0, //position view of sprite
+        getSpriteRow(direction) * 128, // calculate row based on direction
         128, //size of sprite
         128,
         spriteX,
@@ -45,6 +62,52 @@ window.addEventListener("load", function () {
         128
       );
     }, 1000 / framesPerSecond); //how fast it loops
+
+    // update direction based on arrow keys
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "ArrowRight") {
+        spriteX += spriteSpeed;
+        direction = "right";
+        isMoving = true;
+      }
+      if (event.key === "ArrowLeft") {
+        spriteX -= spriteSpeed;
+        direction = "left";
+        isMoving = true;
+      }
+      if (event.key === "ArrowDown") {
+        spriteY += spriteSpeed;
+        direction = "down";
+        isMoving = true;
+      }
+      if (event.key === "ArrowUp") {
+        spriteY -= spriteSpeed;
+        direction = "up";
+        isMoving = true;
+      }
+    });
+
+    document.addEventListener("keyup", function (event) {
+      // stop sprite movement
+      spriteX.destX = spriteX; //stops X at any destination
+      spriteY.destY = spriteY; //stops Y at any destination
+      isMoving = false; //reset isMoving
+    });
+
+    function getSpriteRow(direction) {
+      switch (direction) {
+        case "up":
+          return 3; //going up
+        case "down":
+          return 0; //going down
+        case "left":
+          return 2; //going left
+        case "right":
+          return 1; //going right
+        default: //stopped default
+          return 0;
+      }
+    }
   };
-  spriteSheet.src = "game-assets/images/sprite-sheets/sprite-sheet-bianca.png";
+  spriteSheet.src = "game-assets/images/sprite-sheets/sprite-sheet-bianca.png"; //sprite sheet source
 });
