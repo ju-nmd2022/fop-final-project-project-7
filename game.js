@@ -10,16 +10,8 @@ window.addEventListener("load", function () {
   https://www.youtube.com/watch?v=fyi4vfbKEeo&t=141s */
   const bedroom = new Image();
   bedroom.src = "game-assets/images/bedroom.png";
-  // bedroom.onload = function () {
-  // ctx.drawImage(bedroom, 0, 0, gameCanvas.width, gameCanvas.height);
-  // };
 
   // creating bed object
-  // const bed = new Image();
-  // bed.onload = function () {
-  //   ctx.drawImage(bed, 400, 200);
-  // };
-  // bed.src = "game-assets/images/inactive-objects/bed.png";
   const bed = new InactiveObject(350, 250,"game-assets/images/inactive-objects/bed.png", ctx);
 
   // creating sprite object
