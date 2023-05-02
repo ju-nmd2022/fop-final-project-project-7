@@ -1,4 +1,5 @@
-import { InactiveObject } from "./objects.js";
+import { InactiveObject } from "./inactive-objects.js";
+import { ActiveObject } from "./active-objects.js";
 window.addEventListener("load", function () {
   //for when window loads
   const gameCanvas = document.getElementById("gameCanvas"); //references the game canvas
@@ -11,9 +12,22 @@ window.addEventListener("load", function () {
   const bedroom = new Image();
   bedroom.src = "game-assets/images/bedroom.png";
 
-  // creating bed object
+  // creating inactive objects
   const bed = new InactiveObject(350, 200,"game-assets/images/inactive-objects/bed.png", ctx);
   const wardrobe = new InactiveObject(435,130, "game-assets/images/inactive-objects/wardrobe.png", ctx);
+  const hangingPlants = new InactiveObject(88,13, "game-assets/images/inactive-objects/hanging plants.png", ctx);
+  const lights = new InactiveObject(0,10, "game-assets/images/inactive-objects/lights.png", ctx);
+  const nightstand = new InactiveObject(255,180, "game-assets/images/inactive-objects/nightstand.png", ctx);
+  const rug = new InactiveObject(100,290, "game-assets/images/inactive-objects/rug.png", ctx);
+  const shelf = new InactiveObject(135,90, "game-assets/images/inactive-objects/shelf.png", ctx);
+
+  //creating active objects
+  const bookshelf = new ActiveObject(20 ,130, "game-assets/images/active-objects/bookshelf.png", ctx);
+  const floorPlant = new ActiveObject(430 ,400, "game-assets/images/active-objects/floor plant.png", ctx);
+  const painting = new ActiveObject(220 ,390, "game-assets/images/active-objects/painting.png", ctx);
+  const playground = new ActiveObject(30 ,360, "game-assets/images/active-objects/playground.png", ctx);
+  const table = new ActiveObject(120 ,200, "game-assets/images/active-objects/table.png", ctx);
+  const window = new ActiveObject(240 ,95, "game-assets/images/active-objects/window.png", ctx);
 
   // creating sprite object
   const spriteSheet = new Image(); //
@@ -49,9 +63,35 @@ window.addEventListener("load", function () {
         }
       }
 
+        // update sprite position on room's margins
+  if (spriteX < -45) {
+    spriteX = -40;
+  } else if (spriteX > 430) {
+    spriteX = 425;
+  }
+  if (spriteY < 145) {
+    spriteY = 150;
+  } else if (spriteY > 390) {
+    spriteY = 385;
+  }
+
       // draw sprite and background
       ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
       ctx.drawImage(bedroom, 0, 0, gameCanvas.width, gameCanvas.height);
+
+      // draw inactive objects
+      bed.draw(ctx);
+      wardrobe.draw(ctx);      
+      lights.draw(ctx);
+      hangingPlants.draw(ctx);      
+      nightstand.draw(ctx);
+      rug.draw(ctx);
+      shelf.draw(ctx);
+
+      //draw active objects
+      bookshelf.draw(ctx);
+      table.draw(ctx);
+      window.draw(ctx);
       ctx.drawImage(
         spriteSheet,
         frameIndex * 128,
@@ -63,9 +103,19 @@ window.addEventListener("load", function () {
         128,
         128
       );
-      bed.draw(ctx);
-      wardrobe.draw(ctx);
+      floorPlant.draw(ctx);
+      painting.draw(ctx);
+      playground.draw(ctx);      
     }, 1000 / framesPerSecond); //how fast it loops
+
+    //putting borders
+    if (spriteX < 0){
+      spriteX = 1;
+      isMoving = false;
+    } else if (spriteX > 512){
+      spriteX = 511;
+      isMoving = false;
+    }
 
     // update direction based on arrow keys
     document.addEventListener("keydown", function (event) {
@@ -114,4 +164,5 @@ window.addEventListener("load", function () {
     }
   };
   spriteSheet.src = "game-assets/images/sprite-sheets/sprite-sheet-bianca.png"; //sprite sheet source
+
 });
