@@ -1,3 +1,4 @@
+import { InactiveObject } from "./objects.js";
 window.addEventListener("load", function () {
   //for when window loads
   const gameCanvas = document.getElementById("gameCanvas"); //references the game canvas
@@ -9,9 +10,10 @@ window.addEventListener("load", function () {
   https://www.youtube.com/watch?v=fyi4vfbKEeo&t=141s */
   const bedroom = new Image();
   bedroom.src = "game-assets/images/bedroom.png";
-  // bedroom.onload = function () {
-  // ctx.drawImage(bedroom, 0, 0, gameCanvas.width, gameCanvas.height);
-  // };
+
+  // creating bed object
+  const bed = new InactiveObject(350, 200,"game-assets/images/inactive-objects/bed.png", ctx);
+  const wardrobe = new InactiveObject(435,130, "game-assets/images/inactive-objects/wardrobe.png", ctx);
 
   // creating sprite object
   const spriteSheet = new Image(); //
@@ -61,6 +63,8 @@ window.addEventListener("load", function () {
         128,
         128
       );
+      bed.draw(ctx);
+      wardrobe.draw(ctx);
     }, 1000 / framesPerSecond); //how fast it loops
 
     // update direction based on arrow keys
