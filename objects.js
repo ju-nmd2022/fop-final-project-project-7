@@ -5,7 +5,6 @@ export class InactiveObject {
     this.ctx = ctx;
     this.image = new Image();
     this.image.onload = () => {
-      console.log("apple");
       this.draw();
     };
     this.image.src = imageSrc;

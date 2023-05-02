@@ -12,7 +12,8 @@ window.addEventListener("load", function () {
   bedroom.src = "game-assets/images/bedroom.png";
 
   // creating bed object
-  const bed = new InactiveObject(350, 250,"game-assets/images/inactive-objects/bed.png", ctx);
+  const bed = new InactiveObject(350, 200,"game-assets/images/inactive-objects/bed.png", ctx);
+  const wardrobe = new InactiveObject(435,130, "game-assets/images/inactive-objects/wardrobe.png", ctx);
 
   // creating sprite object
   const spriteSheet = new Image(); //
@@ -63,6 +64,7 @@ window.addEventListener("load", function () {
         128
       );
       bed.draw(ctx);
+      wardrobe.draw(ctx);
     }, 1000 / framesPerSecond); //how fast it loops
 
     // update direction based on arrow keys
