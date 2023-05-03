@@ -29,13 +29,15 @@ window.addEventListener("load", function () {
   const table = new ActiveObject(120 ,200, "game-assets/images/active-objects/table.png", ctx);
   const window = new ActiveObject(240 ,95, "game-assets/images/active-objects/window.png", ctx);
 
+  //borders for objects
+
   // creating sprite object
   const spriteSheet = new Image(); //
   spriteSheet.onload = function () {
     // sprite position
     let spriteX = 150; //sprite start position
     let spriteY = 200;
-    let spriteSpeed = 2; //how quickly sprite moves
+    let spriteSpeed = 4; //how quickly sprite moves
 
     let direction = "down"; // default direction is down
     let isMoving = false; //check if sprite is moving
@@ -63,9 +65,11 @@ window.addEventListener("load", function () {
         }
       }
 
-        // update sprite position on room's margins
+  // update sprite position on room's margins
   if (spriteX < -45) {
     spriteX = -40;
+    isMoving=false;
+    spriteX -= spriteSpeed;
   } else if (spriteX > 430) {
     spriteX = 425;
   }
@@ -74,6 +78,29 @@ window.addEventListener("load", function () {
   } else if (spriteY > 390) {
     spriteY = 385;
   }
+//  if (spriteX > 280 && spriteY < 230 ){
+//   spriteX = 275;
+//  } 
+function isColliding(spriteX, spriteY, bed){
+const spriteBorders = {
+  left: spriteX ,
+  right: spriteX +5,
+  top: spriteY,
+  bottom: spriteY+20,
+}
+ const bedBorders = {
+    left: 275,
+    right : 355,
+    top: 150,
+    bottom: 230,
+  }
+
+  return (spriteBorders.right > bedBorders.left && spriteBorders.left < bedBorders.right && spriteBorders.top < bedBorders.bottom && spriteBorders.bottom > bedBorders.top);
+}
+if( isColliding(spriteX, spriteY, bed)){
+  spriteX = bedBorders -10;
+  isMoving=false;
+}
 
       // draw sprite and background
       ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
@@ -108,14 +135,14 @@ window.addEventListener("load", function () {
       playground.draw(ctx);      
     }, 1000 / framesPerSecond); //how fast it loops
 
-    //putting borders
-    if (spriteX < 0){
-      spriteX = 1;
-      isMoving = false;
-    } else if (spriteX > 512){
-      spriteX = 511;
-      isMoving = false;
-    }
+    // //putting borders
+    // if (spriteX < 0){
+    //   spriteX = 1;
+    //   isMoving = false;
+    // } else if (spriteX > 512){
+    //   spriteX = 511;
+    //   isMoving = false;
+    // }
 
     // update direction based on arrow keys
     document.addEventListener("keydown", function (event) {
