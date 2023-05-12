@@ -1,5 +1,12 @@
 import { InactiveObject } from "./inactive-objects.js";
 import { ActiveObject } from "./active-objects.js";
+
+//borders array for objects
+const borders = [{ left: 275, right: 355, top: 150, bottom: 230 },
+  {left:0, right:60, top: 370, bottom: 390},
+  {left:150, right:270, top: 350, bottom: 390},
+  {left:380, right:430, top: 370, bottom: 390}];
+
 window.addEventListener("load", function () {
   //for when window loads
   const gameCanvas = document.getElementById("gameCanvas"); //references the game canvas
@@ -94,9 +101,6 @@ window.addEventListener("load", function () {
     ctx
   );
 
-  //borders for objects
-  const borders = [{ left: 275, right: 355, top: 150, bottom: 230 }];
-
   // creating sprite object
   const spriteSheet = new Image(); //
   spriteSheet.onload = function () {
@@ -138,11 +142,7 @@ window.addEventListener("load", function () {
         spriteX -= spriteSpeed;
       } else if (spriteX > 430) {
         spriteX = 425;
-      } else if (isColliding(spriteX, spriteY, borders)) {
-        isMoving = false;
-        spriteX = borders[0].left - 5; //stop sprite from moving when colliding with a border
       } else {
-        isMoving = true; //when sprite is not colliding, allow movement
         if (spriteY < 145) {
           spriteY = 150;
         } else if (spriteY > 390) {
@@ -150,9 +150,13 @@ window.addEventListener("load", function () {
         }
       }
 
-      //  if (spriteX > 280 && spriteY < 230 ){
-      //   spriteX = 275;
-      //  }
+
+      if (isColliding(spriteX, spriteY, borders)) {
+        spriteBorders.right = borders[0, 1, 2, 3].left - 5;
+        spriteBorders.left = borders[0, 1, 2, 3].right - 5; //stop sprite from moving when colliding with the right border
+          spriteBorders.top = borders[0, 1, 2, 3].bottom - 20;  //stop sprite from moving when colliding with a border
+      }
+
       function isColliding(spriteX, spriteY, borders) {
         const spriteBorders = {
           left: spriteX,
@@ -160,20 +164,14 @@ window.addEventListener("load", function () {
           top: spriteY,
           bottom: spriteY + 20,
         };
-        // let collisionDetected = false;
-        // const bedBorders = {
-        //   left: 275,
-        //   right: 355,
-        //   top: 150,
-        //   bottom: 230,
-        // };
 
-        for (const border of borders) { //for loop borders
+        for (let i = 0; i < borders.length; i++) { //for loop borders
+          const border = borders[i];
           if (
-            spriteBorders.right > border.left &&
-            spriteBorders.left < border.right &&
-            spriteBorders.top < border.bottom &&
-            spriteBorders.bottom > border.top
+            spriteBorders.right >= border.left &&
+            spriteBorders.left <= border.right &&
+            spriteBorders.top <= border.bottom &&
+            spriteBorders.bottom >= border.top
           ) {
             return true; //moving is true
           }
@@ -181,21 +179,7 @@ window.addEventListener("load", function () {
         {
           return false; //moving is false
         }
-
-        // return collisionDetected;
-
-        // return (
-        //   spriteBorders.right > bedBorders.left &&
-        //   spriteBorders.left < bedBorders.right &&
-        //   spriteBorders.top < bedBorders.bottom &&
-        //   spriteBorders.bottom > bedBorders.top
-        // );
       }
-
-      // if (isColliding(spriteX, spriteY, borders)) {
-      //   spriteX = borders - 10;
-      //   isMoving = false;
-      // }
 
       // draw sprite and background
       ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
@@ -229,15 +213,6 @@ window.addEventListener("load", function () {
       painting.draw(ctx);
       playground.draw(ctx);
     }, 1000 / framesPerSecond); //how fast it loops
-
-    // //putting borders
-    // if (spriteX < 0){
-    //   spriteX = 1;
-    //   isMoving = false;
-    // } else if (spriteX > 512){
-    //   spriteX = 511;
-    //   isMoving = false;
-    // }
 
     // update direction based on arrow keys
     document.addEventListener("keydown", function (event) {
