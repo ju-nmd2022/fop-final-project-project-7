@@ -2,10 +2,12 @@ import { InactiveObject } from "./inactive-objects.js";
 import { ActiveObject } from "./active-objects.js";
 
 //borders array for objects
-const borders = [{ left: 275, right: 355, top: 150, bottom: 230 },
-  {left:0, right:60, top: 370, bottom: 390},
-  {left:150, right:270, top: 350, bottom: 390},
-  {left:380, right:430, top: 370, bottom: 390}];
+const borders = [
+  { left: 275, right: 375, top: 130, bottom: 230 },
+  { left: 0, right: 90, top: 340, bottom: 390 },
+  { left: 140, right: 280, top: 340, bottom: 390 },
+  { left: 360, right: 430, top: 340, bottom: 390 },
+];
 
 window.addEventListener("load", function () {
   //for when window loads
@@ -107,18 +109,20 @@ window.addEventListener("load", function () {
     // sprite position
     let spriteX = 150; //sprite start position
     let spriteY = 200;
+    let newSpriteX = spriteX;
+    let newSpriteY = spriteY;
     let spriteSpeed = 3; //how quickly sprite moves
 
     let direction = "down"; // default direction is down
-    let isMoving = false; //check if sprite is moving
+    let isWalking = false; //check if sprite is moving
 
     // animation loop
     let frameIndex = 0; //which frame is displayed
     let framesPerSecond = 2; //update rate
     setInterval(function () {
       // update sprite frames (stationary bouncing up and down)
-      if (isMoving) {
-        // sprite moving, show walking animation
+      if (isWalking) {
+        // sprite walking, show walking animation
         framesPerSecond = 2;
         frameIndex++;
         if (frameIndex >= 4) {
@@ -126,19 +130,63 @@ window.addEventListener("load", function () {
           frameIndex = 0; //resets
         }
       } else {
-        // sprite not moving, show standing animation
+        // sprite not walking, show standing animation
         framesPerSecond = 2;
         frameIndex++;
         if (frameIndex >= 2) {
           //cycles through 2 frames
           frameIndex = 0; //resets
         }
+        // sprite is moving
+        switch (direction) {
+          case "up":
+            newSpriteY = spriteY - spriteSpeed;
+            break;
+          case "down":
+            newSpriteY;
+            break;
+          case "left":
+            newSpriteX = spriteX - spriteSpeed;
+            break;
+          case "right":
+            newSpriteX = spriteX + spriteSpeed;
+            break;
+        }
+      }
+
+      // check for collision with inactive objects
+      let isCollision = false;
+      for (const object of [
+        bed,
+        wardrobe,
+        hangingPlants,
+        lights,
+        nightstand,
+        rug,
+        shelf,
+      ]) {
+        if (object.isColliding(newSpriteX, newSpriteY)) {
+          isCollision = true;
+        }
+      }
+      // check for collision with active objects
+      for (const object of [
+        bookshelf,
+        floorPlant,
+        painting,
+        playground,
+        table,
+        window,
+      ]) {
+        if (object.isColliding(newSpriteX, newSpriteY)) {
+          isCollision = true;
+        }
       }
 
       // update sprite position on room's margins
       if (spriteX < -45) {
         spriteX = -40;
-        isMoving = false;
+        isWalking = false;
         spriteX -= spriteSpeed;
       } else if (spriteX > 430) {
         spriteX = 425;
@@ -150,37 +198,45 @@ window.addEventListener("load", function () {
         }
       }
 
-
-      if (isColliding(spriteX, spriteY, borders)) {
-        spriteBorders.right = borders[0, 1, 2, 3].left - 5;
-        spriteBorders.left = borders[0, 1, 2, 3].right - 5; //stop sprite from moving when colliding with the right border
-          spriteBorders.top = borders[0, 1, 2, 3].bottom - 20;  //stop sprite from moving when colliding with a border
+      //stop position movement
+      if (
+        newSpriteX < 0 ||
+        newSpriteX + spriteSheet.width > gameCanvas.width ||
+        newSpriteY < 0 ||
+        newSpriteY + spriteSheet.height > gameCanvas.height
+      ) {
+        isCollision = true;
       }
-
-      function isColliding(spriteX, spriteY, borders) {
-        const spriteBorders = {
-          left: spriteX,
-          right: spriteX + 5,
-          top: spriteY,
-          bottom: spriteY + 20,
-        };
-
-        for (let i = 0; i < borders.length; i++) { //for loop borders
-          const border = borders[i];
+      // adjust sprite position if there is collision
+      if (!isCollision) {
+        spriteX = newSpriteX;
+        spriteY = newSpriteY;
+      } else {
+        for (const border of borders) {
           if (
-            spriteBorders.right >= border.left &&
-            spriteBorders.left <= border.right &&
-            spriteBorders.top <= border.bottom &&
-            spriteBorders.bottom >= border.top
+            spriteX > border.left &&
+            spriteX < border.right &&
+            spriteY > border.top &&
+            spriteY < border.bottom
           ) {
-            return true; //moving is true
+            //stop sprite movement
+            isWalking = false;
+            if (direction === "down") {
+              spriteY = border.top;
+              break;
+            } else if (direction === "left") {
+              spriteX = border.right;
+              break;
+            } else if (direction === "right") {
+              spriteX = border.left;
+              break;
+            } else if (direction === "up") {
+              spriteY = border.bottom;
+              break;
+            }
           }
         }
-        {
-          return false; //moving is false
-        }
       }
-
       // draw sprite and background
       ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
       ctx.drawImage(bedroom, 0, 0, gameCanvas.width, gameCanvas.height);
@@ -194,10 +250,11 @@ window.addEventListener("load", function () {
       rug.draw(ctx);
       shelf.draw(ctx);
 
-      //draw active objects
-      bookshelf.draw(ctx);
-      table.draw(ctx);
-      window.draw(ctx);
+      //draw active objects in background
+      bookshelf.draw(spriteX, spriteY, ctx);
+      table.draw(spriteX, spriteY, ctx);
+      window.draw(spriteX, spriteY, ctx);
+      //draw sprite
       ctx.drawImage(
         spriteSheet,
         frameIndex * 128,
@@ -209,9 +266,10 @@ window.addEventListener("load", function () {
         128,
         128
       );
-      floorPlant.draw(ctx);
-      painting.draw(ctx);
-      playground.draw(ctx);
+      //draw active objects in foreground
+      floorPlant.draw(spriteX, spriteY, ctx);
+      painting.draw(spriteX, spriteY, ctx);
+      playground.draw(spriteX, spriteY, ctx);
     }, 1000 / framesPerSecond); //how fast it loops
 
     // update direction based on arrow keys
@@ -219,28 +277,28 @@ window.addEventListener("load", function () {
       if (event.key === "ArrowRight") {
         spriteX += spriteSpeed;
         direction = "right";
-        isMoving = true;
+        isWalking = true;
       }
       if (event.key === "ArrowLeft") {
         spriteX -= spriteSpeed;
         direction = "left";
-        isMoving = true;
+        isWalking = true;
       }
       if (event.key === "ArrowDown") {
         spriteY += spriteSpeed;
         direction = "down";
-        isMoving = true;
+        isWalking = true;
       }
       if (event.key === "ArrowUp") {
         spriteY -= spriteSpeed;
         direction = "up";
-        isMoving = true;
+        isWalking = true;
       }
     });
 
     document.addEventListener("keyup", function (event) {
       // stop sprite movement
-      isMoving = false; //reset isMoving
+      isWalking = false; //reset isMoving
     });
 
     function getSpriteRow(direction) {
