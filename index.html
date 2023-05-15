@@ -6,20 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Serotonin Simulator</title>
     <link rel="stylesheet" href="main.css" />
-    <!-- <script src="game.js" defer></script> was showing up -->
+    <script type="module" src="start-screen.js" defer></script>
   </head>
   <body>
+    <div class = "stars1"></div> 
+    <div class = "stars2"></div>
+    <div class = "stars3"></div>
+    <div id = "catcontainer">
+    <img
+    id = "hovercat"
+    src = "game-assets/images/hover-cat.png"
+    alt = "the cat that appears next tp the start button when you hover over it"/></div>
+
     <div id="gameContainer">
       <canvas id="gameCanvas"></canvas>
+      
       <img
       id="startScreen"
       src="game-assets/images/start-screen.png"
       alt="Pixelated background with the words Serotonin Simulator and a button to start the game"
       usemap="#startmap"
       width="512px"
-      height="512px"
-    />
-    <map name="startmap">
+      height="512px"/>
+
+    <map id= "startbutton" name="startmap">
       <area
         shape="rect"
         coords="188, 300, 330, 360"
