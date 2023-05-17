@@ -71,7 +71,7 @@ window.addEventListener("load", function () {
     2, //max presses for reading a book
     "game-assets/images/hover-cat.png",
     "game-assets/images/lose-screen.png",
-    2000
+    1000
   );
   const floorPlant = new ActiveObject(
     430,
@@ -85,7 +85,10 @@ window.addEventListener("load", function () {
     390,
     "game-assets/images/active-objects/painting.png",
     ctx,
-    1 //max presses for painting
+    1, //max presses for painting
+    "game-assets/images/success-popups/bob.png",
+    "game-assets/images/success-popups/bob.png",
+    3000
   );
   const playground = new ActiveObject(
     30,
@@ -99,14 +102,20 @@ window.addEventListener("load", function () {
     200,
     "game-assets/images/active-objects/table.png",
     ctx,
-    1 //max presses for watching videos
+    1, //max presses for watching videos
+    "game-assets/images/success-popups/brazilian_dog.gif",
+    "game-assets/images/success-popups/brazilian_dog.gif",
+    1000
   );
   const window = new ActiveObject(
     240,
     95,
     "game-assets/images/active-objects/window.png",
     ctx,
-    4 //max presses for looking out the window
+    4, //max presses for looking out the window
+    "game-assets/images/window-view.png",
+    "game-assets/images/window-view.png",
+    1000
   );
 
   //array for all active objects

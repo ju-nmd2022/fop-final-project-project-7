@@ -25,6 +25,12 @@ export class ActiveObject {
     this.isFailPopupVisible = false;
     this.popupImageTimeout = popupImageTimeout;
     this.popupStartTime = null; //timestamp for how long popup is shown
+
+    //preload popup images to avoid flicker - the following lines of code adapted from chatgpt
+    // this.successPopupImage = new Image();
+    // this.successPopupImage.src = this.successPopupImageSrc;
+    // this.failPopupImage = new Image();
+    // this.failPopupImage.src = this.failPopupImageSrc;
   }
 
   draw(spriteX, spriteY, ctx) {
@@ -32,28 +38,32 @@ export class ActiveObject {
     // check if the sprite is close to the ActiveObject
     if (this.isInRange(spriteX, spriteY, 80)) {
       // display the popup
-      ctx.fillStyle = "white";
-      ctx.fillRect(this.x, this.y - 30, 100, 20);
-      ctx.fillStyle = "black";
-      ctx.font = "10px Courier";
-      ctx.fillText("Press spacebar", this.x, this.y - 15);
+      const spacePopup = new Image();
+      spacePopup.src = "game-assets/images/press-space.png";
+      ctx.drawImage(spacePopup, this.x, this.y - 30);
     }
 
     const currentTime = Date.now();
-    if (this.isSuccessPopupVisible && currentTime - this.popupStartTime < this.popupImageTimeout) {
+    if (
+      this.isSuccessPopupVisible &&
+      currentTime - this.popupStartTime < this.popupImageTimeout
+    ) {
       const successPopupImage = new Image();
       successPopupImage.onload = () => {
-        ctx.drawImage(successPopupImage, 256, 256);
+        ctx.drawImage(successPopupImage, 120, 150);
       };
       successPopupImage.src = this.successPopupImageSrc;
     } else {
       this.isSuccessPopupVisible = false; //hide popup when time runs out
     }
 
-    if (this.isFailPopupVisible && currentTime - this.popupStartTime < this.popupImageTimeout) {
+    if (
+      this.isFailPopupVisible &&
+      currentTime - this.popupStartTime < this.popupImageTimeout
+    ) {
       const failPopupImage = new Image();
       failPopupImage.onload = () => {
-        ctx.drawImage(failPopupImage, 256, 256);
+        ctx.drawImage(failPopupImage, 120, 150);
       };
       failPopupImage.src = this.failPopupImageSrc;
     } else {
@@ -91,7 +101,7 @@ export class ActiveObject {
         this.popupStartTime = currentTime;
       }
     } else {
-      if(this.isSuccessPopupVisible) {
+      if (this.isSuccessPopupVisible) {
         this.isSuccessPopupVisible = false;
       }
       this.isFailPopupVisible = true;
