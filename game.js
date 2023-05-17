@@ -70,37 +70,43 @@ window.addEventListener("load", function () {
     20,
     130,
     "game-assets/images/active-objects/bookshelf.png",
-    ctx
+    ctx,
+    2 //max presses for reading a book
   );
   const floorPlant = new ActiveObject(
     430,
     400,
     "game-assets/images/active-objects/floor plant.png",
-    ctx
+    ctx,
+    1 //max presses for watering the plant
   );
   const painting = new ActiveObject(
     220,
     390,
     "game-assets/images/active-objects/painting.png",
-    ctx
+    ctx,
+    1 //max presses for painting
   );
   const playground = new ActiveObject(
     30,
     360,
     "game-assets/images/active-objects/playground.png",
-    ctx
+    ctx,
+    3 //max presses for petting cat
   );
   const table = new ActiveObject(
     120,
     200,
     "game-assets/images/active-objects/table.png",
-    ctx
+    ctx,
+    1 //max presses for watching videos
   );
   const window = new ActiveObject(
     240,
     95,
     "game-assets/images/active-objects/window.png",
-    ctx
+    ctx,
+    4 //max presses for looking out the window
   );
 
   //array for all active objects
@@ -331,7 +337,14 @@ window.addEventListener("load", function () {
       if (event.code === "Space") {
         for (const object of activeObjects)
           if (object.isInRange(spriteX, spriteY, 80)) {
-            score++;
+            if (object.spacePresses < object.maxSpacePresses) {
+              object.increaseSpacePresses();
+              score++;
+            } else {
+              if (score > 0) {
+                score--;
+              }
+            }
           }
       }
     });
