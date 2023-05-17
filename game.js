@@ -14,10 +14,7 @@ window.addEventListener("load", function () {
   const gameCanvas = document.getElementById("gameCanvas"); //references the game canvas
   const ctx = gameCanvas.getContext("2d"); //draws on canvas
 
-  /* creating background
-  the following 10 lines of code was adapted
-  from Drew Conley on YouTube
-  https://www.youtube.com/watch?v=fyi4vfbKEeo&t=141s */
+  // creating background
   const bedroom = new Image();
   bedroom.src = "game-assets/images/bedroom.png";
 
@@ -71,7 +68,10 @@ window.addEventListener("load", function () {
     130,
     "game-assets/images/active-objects/bookshelf.png",
     ctx,
-    2 //max presses for reading a book
+    2, //max presses for reading a book
+    "game-assets/images/hover-cat.png",
+    "game-assets/images/lose-screen.png",
+    2000
   );
   const floorPlant = new ActiveObject(
     430,
@@ -335,15 +335,19 @@ window.addEventListener("load", function () {
     //user presses space to complete activity and increase score
     document.addEventListener("keydown", (event) => {
       if (event.code === "Space") {
+        const currentTime = Date.now();
         for (const object of activeObjects)
           if (object.isInRange(spriteX, spriteY, 80)) {
             if (object.spacePresses < object.maxSpacePresses) {
-              object.increaseSpacePresses();
+              object.increaseSpacePresses(currentTime);
+              object.isSuccessPopupVisible = true;
               score++;
             } else {
               if (score > 0) {
                 score--;
               }
+              object.isFailPopupVisible = true;
+              object.popupStartTime = currentTime;
             }
           }
       }
