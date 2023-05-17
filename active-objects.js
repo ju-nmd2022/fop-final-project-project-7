@@ -12,29 +12,30 @@ export class ActiveObject {
 
   draw(spriteX, spriteY, ctx) {
     this.ctx.drawImage(this.image, this.x, this.y);
-    // Check if the sprite is close to the ActiveObject
-  if (this.isInRange(spriteX, spriteY, 100)) {
-    // Display the popup
-    ctx.fillStyle = "white";
-    ctx.fillRect(this.x + 20, this.y - 30, 100, 20);
-    ctx.fillStyle = "black";
-    ctx.fillText("Press spacebar", this.x + 25, this.y - 15);
-  }
+    // check if the sprite is close to the ActiveObject
+    if (this.isInRange(spriteX, spriteY, 80)) {
+      // display the popup
+      ctx.fillStyle = "white";
+      ctx.fillRect(this.x, this.y - 30, 100, 20);
+      ctx.fillStyle = "black";
+      ctx.font = "10px Courier";
+      ctx.fillText("Press spacebar", this.x, this.y - 15);
+    }
   }
 
   isColliding(position) {
     return (
       position.x >= this.x &&
-      position.x <= this.x + this.width &&
+      position.x <= this.x + this.image.width &&
       position.y >= this.y &&
-      position.y <= this.y + this.height
+      position.y <= this.y + this.image.height
     );
   }
 
   isInRange(spriteX, spriteY, threshold) {
-    const dx = spriteX - this.x;
-    const dy = spriteY - this.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
+    const distanceX = spriteX - this.x;
+    const distanceY = spriteY - this.y;
+    const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
     return distance < threshold;
   }
 }

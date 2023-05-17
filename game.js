@@ -4,9 +4,9 @@ import { ActiveObject } from "./active-objects.js";
 //borders array for objects
 const borders = [
   { left: 275, right: 375, top: 130, bottom: 230 },
-  { left: 0, right: 90, top: 340, bottom: 390 },
-  { left: 140, right: 280, top: 340, bottom: 390 },
-  { left: 360, right: 430, top: 340, bottom: 390 },
+  { left: -20, right: 90, top: 330, bottom: 400 },
+  { left: 130, right: 270, top: 330, bottom: 400 },
+  { left: 370, right: 450, top: 330, bottom: 400 },
 ];
 
 window.addEventListener("load", function () {
@@ -103,6 +103,16 @@ window.addEventListener("load", function () {
     ctx
   );
 
+  //array for all active objects
+  const activeObjects = [
+    bookshelf,
+    floorPlant,
+    painting,
+    playground,
+    table,
+    window,
+  ];
+
   // creating sprite object
   const spriteSheet = new Image(); //
   spriteSheet.onload = function () {
@@ -119,6 +129,9 @@ window.addEventListener("load", function () {
     // animation loop
     let frameIndex = 0; //which frame is displayed
     let framesPerSecond = 2; //update rate
+
+    //score variable
+    let score = 0;
     setInterval(function () {
       // update sprite frames (stationary bouncing up and down)
       if (isWalking) {
@@ -170,14 +183,7 @@ window.addEventListener("load", function () {
         }
       }
       // check for collision with active objects
-      for (const object of [
-        bookshelf,
-        floorPlant,
-        painting,
-        playground,
-        table,
-        window,
-      ]) {
+      for (const object of activeObjects) {
         if (object.isColliding(newSpriteX, newSpriteY)) {
           isCollision = true;
         }
@@ -191,14 +197,14 @@ window.addEventListener("load", function () {
       } else if (spriteX > 430) {
         spriteX = 425;
       } else {
-        if (spriteY < 145) {
-          spriteY = 150;
+        if (spriteY < 140) {
+          spriteY = 145;
         } else if (spriteY > 390) {
           spriteY = 385;
         }
       }
 
-      //stop position movement
+      //stop position movement - if not added, sprite moves on its own
       if (
         newSpriteX < 0 ||
         newSpriteX + spriteSheet.width > gameCanvas.width ||
@@ -251,9 +257,9 @@ window.addEventListener("load", function () {
       shelf.draw(ctx);
 
       //draw active objects in background
-      bookshelf.draw(spriteX, spriteY, ctx);
-      table.draw(spriteX, spriteY, ctx);
-      window.draw(spriteX, spriteY, ctx);
+      bookshelf.draw(spriteX, spriteY, ctx, score);
+      table.draw(spriteX, spriteY, ctx, score);
+      window.draw(spriteX, spriteY, ctx, score);
       //draw sprite
       ctx.drawImage(
         spriteSheet,
@@ -267,9 +273,14 @@ window.addEventListener("load", function () {
         128
       );
       //draw active objects in foreground
-      floorPlant.draw(spriteX, spriteY, ctx);
-      painting.draw(spriteX, spriteY, ctx);
-      playground.draw(spriteX, spriteY, ctx);
+      floorPlant.draw(spriteX, spriteY, ctx, score);
+      painting.draw(spriteX, spriteY, ctx, score);
+      playground.draw(spriteX, spriteY, ctx, score);
+
+      //draw score on screen
+      ctx.fillStyle = "white";
+      ctx.font = "20px Courier";
+      ctx.fillText("Score: " + score, 10, 30);
     }, 1000 / framesPerSecond); //how fast it loops
 
     // update direction based on arrow keys
@@ -315,6 +326,16 @@ window.addEventListener("load", function () {
           return 0;
       }
     }
+    //user presses space to complete activity and increase score
+    document.addEventListener("keydown", (event) => {
+      if (event.code === "Space") {
+        for (const object of activeObjects)
+          if (object.isInRange(spriteX, spriteY, 80)) {
+            score++;
+          }
+      }
+    });
   };
+
   spriteSheet.src = "game-assets/images/sprite-sheets/sprite-sheet-bianca.png"; //sprite sheet source
 });
