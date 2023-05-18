@@ -107,7 +107,7 @@ window.addEventListener("load", function () {
     "game-assets/images/success-popups/brazilian_dog.gif",
     1000
   );
-  const window = new ActiveObject(
+  const gameWindow = new ActiveObject(
     240,
     95,
     "game-assets/images/active-objects/window.png",
@@ -125,7 +125,7 @@ window.addEventListener("load", function () {
     painting,
     playground,
     table,
-    window,
+    gameWindow,
   ];
 
   // creating sprite object
@@ -145,8 +145,11 @@ window.addEventListener("load", function () {
     let frameIndex = 0; //which frame is displayed
     let framesPerSecond = 2; //update rate
 
-    //score variable
+    //score variables
     let score = 0;
+    let pointsLost = 0;
+    const loseThreshold = 4;
+
     setInterval(function () {
       // update sprite frames (stationary bouncing up and down)
       if (isWalking) {
@@ -171,7 +174,7 @@ window.addEventListener("load", function () {
             newSpriteY = spriteY - spriteSpeed;
             break;
           case "down":
-            newSpriteY;
+            newSpriteY = spriteY + spriteSpeed;
             break;
           case "left":
             newSpriteX = spriteX - spriteSpeed;
@@ -274,7 +277,7 @@ window.addEventListener("load", function () {
       //draw active objects in background
       bookshelf.draw(spriteX, spriteY, ctx, score);
       table.draw(spriteX, spriteY, ctx, score);
-      window.draw(spriteX, spriteY, ctx, score);
+      gameWindow.draw(spriteX, spriteY, ctx, score);
       //draw sprite
       ctx.drawImage(
         spriteSheet,
@@ -296,6 +299,12 @@ window.addEventListener("load", function () {
       ctx.fillStyle = "white";
       ctx.font = "20px Courier";
       ctx.fillText("Score: " + score, 10, 30);
+
+      if (score === 12) {
+        window.location.href = "win-screen.html";
+      } else if (pointsLost === loseThreshold) {
+        window.location.href = "lose-screen.html";
+      }
     }, 1000 / framesPerSecond); //how fast it loops
 
     // update direction based on arrow keys
@@ -357,6 +366,7 @@ window.addEventListener("load", function () {
               }
               object.isFailPopupVisible = true;
               object.popupStartTime = currentTime;
+              pointsLost++;
             }
           }
       }

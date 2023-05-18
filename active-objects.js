@@ -71,12 +71,16 @@ export class ActiveObject {
     }
   }
 
-  isColliding(position) {
+  isColliding(newSpriteX, newSpriteY) {
     return (
-      position.x >= this.x &&
-      position.x <= this.x + this.image.width &&
-      position.y >= this.y &&
-      position.y <= this.y + this.image.height
+      // position.x >= this.x &&
+      // position.x <= this.x + this.image.width &&
+      // position.y >= this.y &&
+      // position.y <= this.y + this.image.height
+      newSpriteX < this.x + this.width &&
+    newSpriteX + spriteSheet.width > this.x &&
+    newSpriteY < this.y + this.height &&
+    newSpriteY + spriteSheet.height > this.y
     );
   }
 
