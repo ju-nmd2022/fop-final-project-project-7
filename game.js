@@ -62,6 +62,8 @@ window.addEventListener("load", function () {
     ctx
   );
 
+
+  
   //creating active objects
   const bookshelf = new ActiveObject(
     20,
@@ -69,16 +71,19 @@ window.addEventListener("load", function () {
     "game-assets/images/active-objects/bookshelf.png",
     ctx,
     2, //max presses for reading a book
-    "game-assets/images/hover-cat.png",
-    "game-assets/images/lose-screen.png",
-    1000
+    "game-assets/images/success-popups/magic-book.png",
+    "game-assets/images/fail-popups/reading.png",
+    2000
   );
   const floorPlant = new ActiveObject(
     430,
     400,
     "game-assets/images/active-objects/floor plant.png",
     ctx,
-    1 //max presses for watering the plant
+    1, //max presses for watering the plant
+    "game-assets/images/success-popups/planti.png",
+    "game-assets/images/fail-popups/drown.png",
+    2000
   );
   const painting = new ActiveObject(
     220,
@@ -87,15 +92,18 @@ window.addEventListener("load", function () {
     ctx,
     1, //max presses for painting
     "game-assets/images/success-popups/bob.png",
-    "game-assets/images/success-popups/bob.png",
-    3000
+    "game-assets/images/fail-popups/painting.png",
+    2000
   );
   const playground = new ActiveObject(
     30,
     360,
     "game-assets/images/active-objects/playground.png",
     ctx,
-    3 //max presses for petting cat
+    3, //max presses for petting cat
+    "game-assets/images/success-popups/happy-cat.png",
+    "game-assets/images/fail-popups/cat.png",
+    2000
   );
   const table = new ActiveObject(
     120,
@@ -103,9 +111,9 @@ window.addEventListener("load", function () {
     "game-assets/images/active-objects/table.png",
     ctx,
     1, //max presses for watching videos
-    "game-assets/images/success-popups/brazilian_dog.gif",
-    "game-assets/images/success-popups/brazilian_dog.gif",
-    1000
+    "game-assets/images/success-popups/game.png",
+    "game-assets/images/fail-popups/pc.png",
+    2000
   );
   const gameWindow = new ActiveObject(
     240,
@@ -113,9 +121,9 @@ window.addEventListener("load", function () {
     "game-assets/images/active-objects/window.png",
     ctx,
     4, //max presses for looking out the window
-    "game-assets/images/window-view.png",
-    "game-assets/images/window-view.png",
-    1000
+    "game-assets/images/success-popups/window-view.png",
+    "game-assets/images/fail-popups/window2.png",
+    2000
   );
 
   //array for all active objects

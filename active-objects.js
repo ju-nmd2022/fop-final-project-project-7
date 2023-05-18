@@ -30,7 +30,8 @@ export class ActiveObject {
     // this.successPopupImage = new Image();
     // this.successPopupImage.src = this.successPopupImageSrc;
     // this.failPopupImage = new Image();
-    // this.failPopupImage.src = this.failPopupImageSrc;
+    // this.failPopupImage.src = this.failPopupImageSrc;  
+
   }
 
   draw(spriteX, spriteY, ctx) {

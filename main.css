@@ -82,12 +82,31 @@ body {
 
 /* hover cat next to the start button  */
 #hovercat{
-  /* background-image: url('game-assets/images/hover-cat.png'); */
   position: absolute;
   margin-left: 590px;
   margin-top: 425px
 }
 
 #catcontainer{
+  display:none;
+}
+
+#hovercat1{
+  position: absolute;
+  margin-left: 530px;
+  margin-top: 520px
+}
+
+#catcontainer1{
+  display:none;
+}
+
+#hovercat2{
+  position: absolute;
+  margin-left: 530px;
+  margin-top: 505px
+}
+
+#catcontainer2{
   display:none;
 }
