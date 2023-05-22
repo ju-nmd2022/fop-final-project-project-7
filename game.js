@@ -143,8 +143,8 @@ window.addEventListener("load", function () {
 
   spriteSheet.onload = function () {
     // sprite position
-    let spriteX = 150; //sprite start position
-    let spriteY = 200;
+    let spriteX = 180; //sprite start position
+    let spriteY = 260;
     let newSpriteX = spriteX;
     let newSpriteY = spriteY;
     let spriteSpeed = 3; //how quickly sprite moves
