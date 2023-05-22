@@ -19,18 +19,14 @@ export class ActiveObject {
     this.image.src = imageSrc;
     this.spacePresses = 0; //number of space presses to begin with
     this.maxSpacePresses = maxSpacePresses; //maximum number of space presses to increase score
-    this.successPopupImageSrc = successPopupImageSrc; //unique popup for each object when task is completed
+    this.successPopupImage = new Image();
+    this.successPopupImage.src = successPopupImageSrc; //unique popup for each object when task is completed
     this.isSuccessPopupVisible = false;
-    this.failPopupImageSrc = failPopupImageSrc; //unique popup for each object when task is failed
+    this.failPopupImage = new Image();
+    this.failPopupImage.src = failPopupImageSrc; //unique popup for each object when task is failed
     this.isFailPopupVisible = false;
     this.popupImageTimeout = popupImageTimeout;
     this.popupStartTime = null; //timestamp for how long popup is shown
-
-    //preload popup images to avoid flicker - the following lines of code adapted from chatgpt
-    // this.successPopupImage = new Image();
-    // this.successPopupImage.src = this.successPopupImageSrc;
-    // this.failPopupImage = new Image();
-    // this.failPopupImage.src = this.failPopupImageSrc;  
 
   }
 
@@ -43,17 +39,16 @@ export class ActiveObject {
       spacePopup.src = "game-assets/images/press-space.png";
       ctx.drawImage(spacePopup, this.x, this.y - 30);
     }
+  }
 
-    const currentTime = Date.now();
+  //draws popups separately
+  drawPopups(ctx, currentTime) {
+    // const currentTime = Date.now();
     if (
       this.isSuccessPopupVisible &&
       currentTime - this.popupStartTime < this.popupImageTimeout
     ) {
-      const successPopupImage = new Image();
-      successPopupImage.onload = () => {
-        ctx.drawImage(successPopupImage, 120, 150);
-      };
-      successPopupImage.src = this.successPopupImageSrc;
+        ctx.drawImage(this.successPopupImage, 120, 150);
     } else {
       this.isSuccessPopupVisible = false; //hide popup when time runs out
     }
@@ -62,11 +57,7 @@ export class ActiveObject {
       this.isFailPopupVisible &&
       currentTime - this.popupStartTime < this.popupImageTimeout
     ) {
-      const failPopupImage = new Image();
-      failPopupImage.onload = () => {
-        ctx.drawImage(failPopupImage, 120, 150);
-      };
-      failPopupImage.src = this.failPopupImageSrc;
+        ctx.drawImage(this.failPopupImage, 120, 150);
     } else {
       this.isFailPopupVisible = false;
     }
@@ -74,10 +65,6 @@ export class ActiveObject {
 
   isColliding(newSpriteX, newSpriteY) {
     return (
-      // position.x >= this.x &&
-      // position.x <= this.x + this.image.width &&
-      // position.y >= this.y &&
-      // position.y <= this.y + this.image.height
       newSpriteX < this.x + this.width &&
     newSpriteX + spriteSheet.width > this.x &&
     newSpriteY < this.y + this.height &&

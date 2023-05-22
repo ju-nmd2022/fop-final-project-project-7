@@ -307,6 +307,14 @@ window.addEventListener("load", function () {
       painting.draw(spriteX, spriteY, ctx, score);
       playground.draw(spriteX, spriteY, ctx, score);
 
+      //draw the popup images
+      bookshelf.drawPopups(ctx, Date.now());
+      table.drawPopups(ctx, Date.now());
+      gameWindow.drawPopups(ctx, Date.now());
+      floorPlant.drawPopups(ctx, Date.now());
+      painting.drawPopups(ctx, Date.now());
+      playground.drawPopups(ctx, Date.now());
+
       //draw score on screen
       ctx.fillStyle = "white";
       ctx.font = "20px Courier";
