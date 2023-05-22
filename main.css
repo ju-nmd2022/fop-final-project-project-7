@@ -110,3 +110,30 @@ body {
 #catcontainer2{
   display:none;
 }
+
+.characters {
+  position: absolute;
+  margin-top: 250px;
+  margin-left: 100px;
+  cursor: pointer;
+}
+
+#linnea:hover{
+transform: scale(1.1);
+}
+
+#bianca{
+  margin-left: 100px;
+}
+
+#bianca:hover{
+  transform: scale(1.1);
+}
+
+p{
+  position: absolute;
+  text-align: center;
+  margin-top: 550px;
+  margin-left: 420px;
+  color: white;
+}

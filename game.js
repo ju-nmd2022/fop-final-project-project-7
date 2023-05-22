@@ -136,8 +136,11 @@ window.addEventListener("load", function () {
     gameWindow,
   ];
 
-  // creating sprite object
-  const spriteSheet = new Image(); //
+  // creating sprite object and accessing them through local storage
+  const selectedCharacter = localStorage.getItem("selectedCharacter");
+  const spriteSheet = new Image();
+  spriteSheet.src = selectedCharacter;
+
   spriteSheet.onload = function () {
     // sprite position
     let spriteX = 150; //sprite start position
@@ -158,6 +161,7 @@ window.addEventListener("load", function () {
     let pointsLost = 0;
     const loseThreshold = 4;
 
+    let selectedCharacter = spriteSheet; 
     setInterval(function () {
       // update sprite frames (stationary bouncing up and down)
       if (isWalking) {
@@ -288,10 +292,10 @@ window.addEventListener("load", function () {
       gameWindow.draw(spriteX, spriteY, ctx, score);
       //draw sprite
       ctx.drawImage(
-        spriteSheet,
+        selectedCharacter,
         frameIndex * 128,
         getSpriteRow(direction) * 128, // calculate row based on direction
-        128, //size of sprite
+        128, // size of sprite 
         128,
         spriteX,
         spriteY,
@@ -381,5 +385,4 @@ window.addEventListener("load", function () {
     });
   };
 
-  spriteSheet.src = "game-assets/images/sprite-sheets/sprite-sheet-bianca.png"; //sprite sheet source
 });
