@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Serotonin Simulator</title>
+    <link rel="stylesheet" href="main.css" />
+    <script src="game.js" defer></script>
+    <script type="module" src="win-screen.js" defer></script>
+  </head>
+  <body>
+    <div class = "stars1"></div> 
+    <div class = "stars2"></div>
+    <div class = "stars3"></div>
+    <div id = "catcontainer2">
+      <img
+      id = "hovercat2"
+      src = "game-assets/images/hover-cat.png"
+      alt = "the cat that appears next tp the start button when you hover over it"/></div>
+
+    <div id="gameContainer" width="512px" height="512px">
+        <canvas id="gameCanvas">
+            <!-- game will appear here -->
+          </canvas>
+          <img
+          id = "loseScreen"
+          src="game-assets/images/win-screen.png"
+          alt="Pixelated losing screen"
+          usemap="#restartmap"
+          width="512px"
+          height="512px"
+        />
+        <map id= "restartbutton" name="restartmap">
+          <area
+            shape="rect"
+            coords="188, 360, 330, 420"
+            href="index.html"
+            alt="Play Again button"
+          />
+        </map>
+    </div>
+  </body>
+</html>
