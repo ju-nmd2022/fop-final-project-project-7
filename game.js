@@ -1,7 +1,13 @@
 import { InactiveObject } from "./inactive-objects.js";
 import { ActiveObject } from "./active-objects.js";
+// not inside of the window.addEventListener because it has
+// to be at the top of the JavaScript file. allows better readability,
+// prevents errors, and ensures modules are imported properly before
+// any other code is executed. it creates a short lag in terms of loading
+// everything else besides the objects, but it does not seem to
+// cause an issue
 
-//borders array for objects
+// borders array for objects
 const borders = [
   { left: 275, right: 375, top: 130, bottom: 230 },
   { left: -20, right: 90, top: 330, bottom: 400 },
@@ -10,9 +16,12 @@ const borders = [
 ];
 
 window.addEventListener("load", function () {
-  //for when window loads
-  const gameCanvas = document.getElementById("gameCanvas"); //references the game canvas
-  const ctx = gameCanvas.getContext("2d"); //draws on canvas
+  // executes when the window finishes loading,
+  // otherwise it will cause errors because
+  // it is loaded before the DOM is finished
+  const gameCanvas = document.getElementById("gameCanvas"); // references the game canvas through its ID
+  const ctx = gameCanvas.getContext("2d");   // gets 2D rendering context on canvas
+  // context is used for drawing on the canvas
 
   // creating background
   const bedroom = new Image();
@@ -20,10 +29,10 @@ window.addEventListener("load", function () {
 
   // creating inactive objects
   const bed = new InactiveObject(
-    350,
-    200,
-    "game-assets/images/inactive-objects/bed.png",
-    ctx
+    350, // position
+    200, // position
+    "game-assets/images/inactive-objects/bed.png", // source
+    ctx // sets rendering context
   );
   const wardrobe = new InactiveObject(
     435,
@@ -62,25 +71,23 @@ window.addEventListener("load", function () {
     ctx
   );
 
-
-  
   //creating active objects
   const bookshelf = new ActiveObject(
-    20,
-    130,
-    "game-assets/images/active-objects/bookshelf.png",
-    ctx,
-    2, //max presses for reading a book
-    "game-assets/images/success-popups/magic-book.png",
-    "game-assets/images/fail-popups/reading.png",
-    2000
+    20, // position
+    130, // position
+    "game-assets/images/active-objects/bookshelf.png", // source
+    ctx, // sets rendering context
+    2, // max presses for reading a book
+    "game-assets/images/success-popups/magic-book.png", // source for success popup
+    "game-assets/images/fail-popups/reading.png", // source for fail popup
+    2000 // timeout in milliseconds
   );
   const floorPlant = new ActiveObject(
     430,
     400,
     "game-assets/images/active-objects/floor plant.png",
     ctx,
-    1, //max presses for watering the plant
+    1, // max presses for watering the plant
     "game-assets/images/success-popups/planti.png",
     "game-assets/images/fail-popups/drown.png",
     2000
@@ -90,7 +97,7 @@ window.addEventListener("load", function () {
     390,
     "game-assets/images/active-objects/painting.png",
     ctx,
-    1, //max presses for painting
+    1, // max presses for painting
     "game-assets/images/success-popups/bob.png",
     "game-assets/images/fail-popups/painting.png",
     2000
@@ -100,7 +107,7 @@ window.addEventListener("load", function () {
     360,
     "game-assets/images/active-objects/playground.png",
     ctx,
-    3, //max presses for petting cat
+    3, // max presses for petting cat
     "game-assets/images/success-popups/happy-cat.png",
     "game-assets/images/fail-popups/cat.png",
     2000
@@ -110,7 +117,7 @@ window.addEventListener("load", function () {
     200,
     "game-assets/images/active-objects/table.png",
     ctx,
-    1, //max presses for watching videos
+    1, // max presses for watching videos
     "game-assets/images/success-popups/game.png",
     "game-assets/images/fail-popups/pc.png",
     2000
@@ -120,13 +127,13 @@ window.addEventListener("load", function () {
     95,
     "game-assets/images/active-objects/window.png",
     ctx,
-    4, //max presses for looking out the window
+    4, // max presses for looking out the window
     "game-assets/images/success-popups/window-view.png",
     "game-assets/images/fail-popups/window2.png",
     2000
   );
 
-  //array for all active objects
+  // array for all active objects
   const activeObjects = [
     bookshelf,
     floorPlant,
@@ -139,36 +146,36 @@ window.addEventListener("load", function () {
   // creating sprite object and accessing them through local storage
   const selectedCharacter = localStorage.getItem("selectedCharacter");
   const spriteSheet = new Image();
-  spriteSheet.src = selectedCharacter;
+  spriteSheet.src = selectedCharacter; // sets source to selectedCharacter
 
-  spriteSheet.onload = function () {
-    // sprite position
+  spriteSheet.onload = function () { // executes when sprite sheet is loaded
+    // sprite position variables
     let spriteX = 180; //sprite start position
-    let spriteY = 260;
-    let newSpriteX = spriteX;
-    let newSpriteY = spriteY;
+    let spriteY = 260; // sprite start position
+    let newSpriteX = spriteX; // updated position of sprite
+    let newSpriteY = spriteY; // updated position of sprite
     let spriteSpeed = 3; //how quickly sprite moves
 
     let direction = "down"; // default direction is down
-    let isWalking = false; //check if sprite is moving
+    let isWalking = false; // check if sprite is moving
 
     // animation loop
-    let frameIndex = 0; //which frame is displayed
-    let framesPerSecond = 2; //update rate
+    let frameIndex = 0; // which frame is displayed
+    let framesPerSecond = 2; // number of frame update rate per second
 
     //score variables
-    let score = 0;
-    let pointsLost = 0;
-    const loseThreshold = 4;
+    let score = 0; // current score set to 0
+    let pointsLost = 0; // points lost set to 0
+    const loseThreshold = 4; // threshold for how many points user can lose before losing
 
-    let selectedCharacter = spriteSheet; 
-    setInterval(function () {
+    let selectedCharacter = spriteSheet; // sprite sheet image, contains multiple frames
+    setInterval(function () { // function executed repeatedly at a set interval
       // update sprite frames (stationary bouncing up and down)
       if (isWalking) {
         // sprite walking, show walking animation
-        framesPerSecond = 2;
-        frameIndex++;
-        if (frameIndex >= 4) {
+        framesPerSecond = 2; // animation speed
+        frameIndex++; // move to next frame
+        if (frameIndex >= 4) { // when all frames have been shown, reset to first frame
           //cycles through 4 frames
           frameIndex = 0; //resets
         }
@@ -180,7 +187,7 @@ window.addEventListener("load", function () {
           //cycles through 2 frames
           frameIndex = 0; //resets
         }
-        // sprite is moving
+        // update sprite position based on current direction
         switch (direction) {
           case "up":
             newSpriteY = spriteY - spriteSpeed;
@@ -223,7 +230,7 @@ window.addEventListener("load", function () {
       if (spriteX < -45) {
         spriteX = -40;
         isWalking = false;
-        spriteX -= spriteSpeed;
+        spriteX -= spriteSpeed; // move sprite slightly to left
       } else if (spriteX > 430) {
         spriteX = 425;
       } else {
@@ -247,7 +254,7 @@ window.addEventListener("load", function () {
       if (!isCollision) {
         spriteX = newSpriteX;
         spriteY = newSpriteY;
-      } else {
+      } else { // checks for collision with borders
         for (const border of borders) {
           if (
             spriteX > border.left &&
@@ -258,7 +265,7 @@ window.addEventListener("load", function () {
             //stop sprite movement
             isWalking = false;
             if (direction === "down") {
-              spriteY = border.top;
+              spriteY = border.top; //adjusts position to stay in that border position to prevent movement/teleportation
               break;
             } else if (direction === "left") {
               spriteX = border.right;
@@ -295,7 +302,7 @@ window.addEventListener("load", function () {
         selectedCharacter,
         frameIndex * 128,
         getSpriteRow(direction) * 128, // calculate row based on direction
-        128, // size of sprite 
+        128, // size of sprite
         128,
         spriteX,
         spriteY,
@@ -308,8 +315,8 @@ window.addEventListener("load", function () {
       playground.draw(spriteX, spriteY, ctx, score);
 
       //draw the popup images
-      bookshelf.drawPopups(ctx, Date.now());
-      table.drawPopups(ctx, Date.now());
+      bookshelf.drawPopups(ctx, Date.now()); // current timestamp received
+      table.drawPopups(ctx, Date.now()); 
       gameWindow.drawPopups(ctx, Date.now());
       floorPlant.drawPopups(ctx, Date.now());
       painting.drawPopups(ctx, Date.now());
@@ -320,10 +327,10 @@ window.addEventListener("load", function () {
       ctx.font = "20px Courier";
       ctx.fillText("Score: " + score, 10, 30);
 
-      if (score === 12) {
-        window.location.href = "win-screen.html";
-      } else if (pointsLost === loseThreshold) {
-        window.location.href = "lose-screen.html";
+      if (score === 12) { // winning score
+        window.location.href = "win-screen.html"; // send to win screen
+      } else if (pointsLost === loseThreshold) { // lose 4 points
+        window.location.href = "lose-screen.html"; // send to lose screen
       }
     }, 1000 / framesPerSecond); //how fast it loops
 
@@ -371,26 +378,27 @@ window.addEventListener("load", function () {
       }
     }
     //user presses space to complete activity and increase score
-    document.addEventListener("keydown", (event) => {
+    document.addEventListener("keydown", (event) => { // listens for space key pressed
       if (event.code === "Space") {
-        const currentTime = Date.now();
+        const currentTime = Date.now(); //current timestamp in milliseconds
         for (const object of activeObjects)
-          if (object.isInRange(spriteX, spriteY, 80)) {
+          if (object.isInRange(spriteX, spriteY, 80)) { // checks if sprite is in range of object (80 pixels)
             if (object.spacePresses < object.maxSpacePresses) {
+              // check if the spacePresses counter of the object is less than its maximum allowed presses
               object.increaseSpacePresses(currentTime);
-              object.isSuccessPopupVisible = true;
-              score++;
-            } else {
+              // increase the spacePresses counter of the object and update its timestamp
+              object.isSuccessPopupVisible = true; // display success popup
+              score++; // increase score by 1
+            } else { // if maximum number of presses is reached
               if (score > 0) {
-                score--;
+                score--; // decrease score by 1 if greater than 0 to avoid negative values
               }
-              object.isFailPopupVisible = true;
-              object.popupStartTime = currentTime;
-              pointsLost++;
+              object.isFailPopupVisible = true; // show fail popup
+              object.popupStartTime = currentTime; // sets start time to current timestamp
+              pointsLost++; // increase points lost by 1
             }
           }
       }
     });
   };
-
 });
